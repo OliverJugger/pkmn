@@ -9,42 +9,10 @@
     />
 
     @if (isOwned$ | async) {
-      <div class="owned-badge" pTooltip="Dans ma collection physique" tooltipPosition="top">
+      <div class="owned-badge" pTooltip="Dans ma collection" tooltipPosition="top">
         <i class="pi pi-check"></i>
       </div>
     }
-
-    <div class="card-overlay">
-      <div class="overlay-actions" (click)="$event.stopPropagation()">
-        @if (quantity$ | async; as qty) {
-          @if (qty > 0) {
-            <div class="quantity-badge">x{{ qty }}</div>
-          }
-        }
-        <button
-          pButton
-          icon="pi pi-plus"
-          severity="success"
-          size="small"
-          [rounded]="true"
-          pTooltip="Ajouter à ma collection"
-          tooltipPosition="top"
-          (click)="onAdd($event)"
-        ></button>
-        @if (isInCollection$ | async) {
-          <button
-            pButton
-            icon="pi pi-minus"
-            severity="danger"
-            size="small"
-            [rounded]="true"
-            pTooltip="Retirer une copie"
-            tooltipPosition="top"
-            (click)="onRemove($event)"
-          ></button>
-        }
-      </div>
-    </div>
   </div>
 
   <div class="card-info">

@@ -4,21 +4,15 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
-import { PaginatorModule } from 'primeng/paginator';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageModule } from 'primeng/message';
 import { AsyncPipe } from '@angular/common';
 import { CardThumbnailComponent } from '../../shared/components/card-thumbnail/card-thumbnail.component';
+import { PaginatorComponent } from '../../shared/components/paginator/paginator.component';
 import { PokemonApiService } from '../../core/services/pokemon-api.service';
 import { PersonalCollectionService } from '../../core/services/personal-collection.service';
 import { Card } from '../../core/models/card.model';
 import { PokemonSet } from '../../core/models/set.model';
-
-interface PaginatorState {
-  page?: number;
-  rows?: number;
-  first?: number;
-}
 
 @Component({
   selector: 'app-browse',
@@ -28,10 +22,10 @@ interface PaginatorState {
     FormsModule,
     InputTextModule,
     SelectModule,
-    PaginatorModule,
     ProgressSpinnerModule,
     MessageModule,
-    CardThumbnailComponent
+    CardThumbnailComponent,
+    PaginatorComponent
   ],
   templateUrl: './browse.component.html',
   styleUrls: ['./browse.component.scss']
@@ -56,6 +50,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
   totalCount = 0;
   pageSize = 20;
   currentPage = 1;
+  first = 0; // index du premier élément — piloté par le Paginator
 
   ngOnInit(): void {
     this.loadSets();
@@ -67,6 +62,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(() => {
       this.currentPage = 1;
+      this.first = 0;
       this.loadCards();
     });
   }
@@ -120,18 +116,20 @@ export class BrowseComponent implements OnInit, OnDestroy {
 
   onSetChange(): void {
     this.currentPage = 1;
+    this.first = 0;
     this.loadCards();
   }
 
   onSetClear(): void {
     this.selectedSet = null;
     this.currentPage = 1;
+    this.first = 0;
     this.loadCards();
   }
 
-  onPageChange(event: PaginatorState): void {
-    this.currentPage = (event.page ?? 0) + 1;
-    this.pageSize = event.rows ?? 20;
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.first = (page - 1) * this.pageSize;
     this.loadCards();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }

@@ -1,17 +1,15 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { DividerModule } from 'primeng/divider';
 import { ChipModule } from 'primeng/chip';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 import { PokemonApiService } from '../../core/services/pokemon-api.service';
-import { CollectionService } from '../../core/services/collection.service';
+import { TranslationService } from '../../core/services/translation.service';
 import { Card } from '../../core/models/card.model';
 
 const TYPE_ICONS: Record<string, string> = {
@@ -24,30 +22,28 @@ const TYPE_ICONS: Record<string, string> = {
   selector: 'app-card-detail',
   standalone: true,
   imports: [
+    AsyncPipe,
     CurrencyPipe,
     RouterLink,
     ButtonModule,
     TagModule,
     DividerModule,
     ChipModule,
-    ProgressSpinnerModule,
-    ToastModule
+    ProgressSpinnerModule
   ],
-  providers: [MessageService],
   templateUrl: './card-detail.component.html',
   styleUrls: ['./card-detail.component.scss']
 })
 export class CardDetailComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private apiService = inject(PokemonApiService);
-  private collectionService = inject(CollectionService);
-  private messageService = inject(MessageService);
+  private translationService = inject(TranslationService);
   private destroy$ = new Subject<void>();
 
   card: Card | null = null;
+  translatedName$: Observable<string> | null = null;
   loading = true;
   error = '';
-  quantity = 0;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -58,38 +54,11 @@ export class CardDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           this.card = res.data;
+          this.translatedName$ = this.translationService.translate(res.data.name);
           this.loading = false;
-          this.collectionService.getQuantity(id)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(q => this.quantity = q);
         },
-        error: () => {
-          this.error = 'Carte introuvable ou erreur réseau.';
-          this.loading = false;
-        }
+        error: () => { this.error = 'Carte introuvable ou erreur réseau.'; this.loading = false; }
       });
-  }
-
-  addToCollection(): void {
-    if (!this.card) return;
-    this.collectionService.addCard(this.card);
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Ajoutée !',
-      detail: `${this.card.name} ajoutée à votre collection.`,
-      life: 2000
-    });
-  }
-
-  removeFromCollection(): void {
-    if (!this.card) return;
-    this.collectionService.removeCard(this.card.id);
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Retirée',
-      detail: `${this.card.name} — une copie retirée.`,
-      life: 2000
-    });
   }
 
   getTypeIcon(type: string): string {

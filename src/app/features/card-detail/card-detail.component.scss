@@ -55,32 +55,6 @@
         box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
       }
 
-      .collection-actions {
-        margin-top: 1.5rem;
-        background: var(--p-surface-card);
-        border: 1px solid var(--p-surface-border);
-        border-radius: 12px;
-        padding: 1rem;
-
-        .quantity-display {
-          text-align: center;
-          margin-bottom: 0.75rem;
-          font-size: 0.9rem;
-          color: var(--p-text-muted-color);
-
-          strong {
-            color: var(--p-primary-color);
-            font-size: 1.15rem;
-          }
-        }
-
-        .action-buttons {
-          display: flex;
-          gap: 0.75rem;
-
-          button { flex: 1; justify-content: center; }
-        }
-      }
     }
 
     .card-info {
@@ -88,8 +62,15 @@
         h1 {
           font-size: 2.1rem;
           font-weight: 800;
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.25rem;
           letter-spacing: -0.03em;
+        }
+
+        .original-name {
+          font-size: 0.95rem;
+          color: var(--p-text-muted-color);
+          margin-bottom: 0.75rem;
+          font-style: italic;
         }
 
         .card-types {

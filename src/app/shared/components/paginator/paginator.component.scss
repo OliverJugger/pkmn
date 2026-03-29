@@ -1,0 +1,60 @@
+.paginator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 1.5rem 0;
+}
+
+.page-btn {
+  min-width: 38px;
+  height: 38px;
+  padding: 0 0.5rem;
+  border: 1px solid var(--p-surface-border);
+  background: var(--p-surface-card);
+  color: var(--p-text-color);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+  &:hover:not(:disabled):not(.active) {
+    background: var(--p-surface-hover);
+    border-color: var(--p-primary-color);
+    color: var(--p-primary-color);
+  }
+
+  &.active {
+    background: var(--p-primary-color);
+    border-color: var(--p-primary-color);
+    color: #fff;
+    font-weight: 700;
+    cursor: default;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  &.nav-btn {
+    i { font-size: 0.75rem; }
+  }
+}
+
+.ellipsis {
+  min-width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--p-text-muted-color);
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
