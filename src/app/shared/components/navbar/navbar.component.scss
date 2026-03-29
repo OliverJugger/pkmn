@@ -1,0 +1,75 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 64px;
+  background: var(--p-surface-card);
+  border-bottom: 1px solid var(--p-surface-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    }
+
+    .brand-name {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--p-primary-color);
+      letter-spacing: -0.02em;
+    }
+  }
+
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      text-decoration: none;
+      color: var(--p-text-color);
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+      position: relative;
+
+      i {
+        font-size: 0.95rem;
+      }
+
+      &:hover,
+      &.active-link {
+        background: var(--p-primary-50, rgba(99, 102, 241, 0.08));
+        color: var(--p-primary-color);
+      }
+
+      .count-badge {
+        background: var(--p-primary-color);
+        color: white;
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.1rem 0.45rem;
+        border-radius: 12px;
+        min-width: 20px;
+        text-align: center;
+        line-height: 1.4;
+      }
+    }
+  }
+}

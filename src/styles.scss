@@ -1,0 +1,63 @@
+/* =============================================
+   Styles globaux — PokéCollection
+   ============================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar custom */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--p-surface-400);
+  border-radius: 3px;
+}
+
+/* PrimeNG overrides */
+.p-button {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+}
+
+.p-tag {
+  font-weight: 600;
+}
+
+/* PrimeNG p-message full width */
+.p-message.w-full {
+  width: 100%;
+}
+
+/* Cost chips dans les attaques */
+.cost-chip .p-chip {
+  font-size: 0.72rem;
+  padding: 0.1rem 0.5rem;
+  height: 22px;
+}
+
+/* View transitions (Angular 19) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
+}

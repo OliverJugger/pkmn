@@ -1,0 +1,194 @@
+<p-toast />
+
+<div class="detail-container">
+  <a routerLink="/browse" class="back-link">
+    <i class="pi pi-arrow-left"></i>
+    <span>Retour à la liste</span>
+  </a>
+
+  @if (loading) {
+    <div class="loading-container">
+      <p-progressSpinner strokeWidth="4" animationDuration="0.8s" />
+    </div>
+  }
+
+  @if (error && !loading) {
+    <div class="error-state">
+      <i class="pi pi-exclamation-triangle"></i>
+      <p>{{ error }}</p>
+    </div>
+  }
+
+  @if (!loading && card) {
+    <div class="card-detail">
+
+      <!-- Colonne image + actions -->
+      <div class="card-visual">
+        <img [src]="card.images.large" [alt]="card.name" class="card-image" />
+
+        <div class="collection-actions">
+          @if (quantity > 0) {
+            <div class="quantity-display">
+              Dans ma collection&nbsp;: <strong>x{{ quantity }}</strong>
+            </div>
+          }
+          <div class="action-buttons">
+            <button
+              pButton
+              icon="pi pi-plus"
+              label="Ajouter"
+              severity="success"
+              (click)="addToCollection()"
+            ></button>
+            <button
+              pButton
+              icon="pi pi-minus"
+              label="Retirer"
+              severity="danger"
+              [disabled]="quantity === 0"
+              (click)="removeFromCollection()"
+            ></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colonne infos -->
+      <div class="card-info">
+        <div class="card-header">
+          <h1>{{ card.name }}</h1>
+
+          @if (card.types?.length) {
+            <div class="card-types">
+              @for (type of card.types; track type) {
+                <span class="type-badge">{{ getTypeIcon(type) }} {{ type }}</span>
+              }
+            </div>
+          }
+
+          <div class="card-tags">
+            <p-tag [value]="card.supertype" severity="info" />
+            @if (card.rarity) {
+              <p-tag [value]="card.rarity" severity="warn" />
+            }
+            @if (card.hp) {
+              <p-tag [value]="'HP ' + card.hp" severity="danger" />
+            }
+          </div>
+        </div>
+
+        <p-divider />
+
+        <!-- Extension -->
+        <div class="info-section">
+          <h3>Extension</h3>
+          <div class="set-info">
+            <img [src]="card.set.images.symbol" [alt]="card.set.name" class="set-symbol" />
+            <div>
+              <p class="set-name">{{ card.set.name }}</p>
+              <p class="set-meta">{{ card.set.series }} · {{ card.number }}/{{ card.set.printedTotal }}</p>
+              <p class="set-date">Sortie le {{ card.set.releaseDate }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flavor text -->
+        @if (card.flavorText) {
+          <p-divider />
+          <div class="info-section">
+            <h3>Description</h3>
+            <p class="flavor-text">"{{ card.flavorText }}"</p>
+          </div>
+        }
+
+        <!-- Capacités -->
+        @if (card.abilities?.length) {
+          <p-divider />
+          <div class="info-section">
+            <h3>Capacités</h3>
+            @for (ability of card.abilities; track ability.name) {
+              <div class="ability-card">
+                <div class="ability-header">
+                  <p-tag [value]="ability.type" severity="secondary" />
+                  <strong>{{ ability.name }}</strong>
+                </div>
+                @if (ability.text) {
+                  <p>{{ ability.text }}</p>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Attaques -->
+        @if (card.attacks?.length) {
+          <p-divider />
+          <div class="info-section">
+            <h3>Attaques</h3>
+            @for (attack of card.attacks; track attack.name) {
+              <div class="attack-card">
+                <div class="attack-header">
+                  <div class="attack-cost">
+                    @for (cost of attack.cost; track $index) {
+                      <p-chip [label]="cost" styleClass="cost-chip" />
+                    }
+                  </div>
+                  <strong class="attack-name">{{ attack.name }}</strong>
+                  <span class="attack-damage">{{ attack.damage }}</span>
+                </div>
+                @if (attack.text) {
+                  <p class="attack-text">{{ attack.text }}</p>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Faiblesses / Résistances -->
+        @if (card.weaknesses?.length || card.resistances?.length) {
+          <p-divider />
+          <div class="info-section">
+            <div class="weaknesses-resistances">
+              @if (card.weaknesses?.length) {
+                <div>
+                  <h3>Faiblesses</h3>
+                  <div class="wr-list">
+                    @for (w of card.weaknesses; track w.type) {
+                      <span class="wr-badge weakness">{{ getTypeIcon(w.type) }} {{ w.type }} {{ w.value }}</span>
+                    }
+                  </div>
+                </div>
+              }
+              @if (card.resistances?.length) {
+                <div>
+                  <h3>Résistances</h3>
+                  <div class="wr-list">
+                    @for (r of card.resistances; track r.type) {
+                      <span class="wr-badge resistance">{{ getTypeIcon(r.type) }} {{ r.type }} {{ r.value }}</span>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Prix -->
+        @if (getMarketPrice()) {
+          <p-divider />
+          <div class="info-section">
+            <h3>Prix marché (TCGPlayer)</h3>
+            <p class="market-price">{{ getMarketPrice() | currency:'USD':'symbol':'1.2-2' }}</p>
+          </div>
+        }
+
+        <!-- Artiste -->
+        @if (card.artist) {
+          <div class="info-section artist-section">
+            <i class="pi pi-palette"></i>
+            <span>Illustrateur : <strong>{{ card.artist }}</strong></span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

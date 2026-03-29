@@ -1,0 +1,96 @@
+<div class="browse-container">
+  <header class="browse-header">
+    <h1>Parcourir les cartes</h1>
+    <div class="active-filters">
+      <span class="filter-badge">
+        <i class="pi pi-star-fill"></i>
+        Illustration Rare
+      </span>
+      <span class="filter-badge">
+        <i class="pi pi-shield"></i>
+        Pokémon uniquement
+      </span>
+    </div>
+
+    <div class="browse-filters">
+      <div class="search-wrapper">
+        <i class="pi pi-search search-icon"></i>
+        <input
+          pInputText
+          type="text"
+          placeholder="Rechercher une carte (ex: Pikachu)..."
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange()"
+          class="search-input"
+        />
+        @if (searchQuery) {
+          <i class="pi pi-times clear-icon" (click)="searchQuery = ''; onSearchChange()"></i>
+        }
+      </div>
+
+      <p-select
+        [options]="sets"
+        [(ngModel)]="selectedSet"
+        optionLabel="name"
+        placeholder="Filtrer par extension"
+        [showClear]="true"
+        [filter]="true"
+        filterPlaceholder="Chercher une extension..."
+        (onChange)="onSetChange()"
+        styleClass="set-select"
+        [loading]="loadingSets"
+      />
+    </div>
+  </header>
+
+  @if (loading) {
+    <div class="loading-container">
+      <p-progressSpinner strokeWidth="4" animationDuration="0.8s" />
+      <p>Chargement des cartes...</p>
+    </div>
+  }
+
+  @if (error && !loading) {
+    <p-message severity="error" [text]="error" styleClass="error-message" />
+  }
+
+  @if (!loading && !error) {
+    <div class="results-header">
+      <span class="results-count">
+        <strong>{{ totalCount }}</strong> carte(s) trouvée(s)
+      </span>
+      @if (ownedCount$ | async; as owned) {
+        <span class="owned-count">
+          <i class="pi pi-check-circle"></i>
+          <strong>{{ owned }}</strong> possédée(s)
+        </span>
+      }
+    </div>
+  }
+
+  @if (!loading && cards.length > 0) {
+    <div class="cards-grid">
+      @for (card of cards; track card.id) {
+        <app-card-thumbnail [card]="card" />
+      }
+    </div>
+  }
+
+  @if (!loading && cards.length === 0 && !error) {
+    <div class="empty-state">
+      <i class="pi pi-search empty-icon"></i>
+      <p>Aucune carte trouvée pour cette recherche.</p>
+      <small>Essaie un autre nom ou efface les filtres.</small>
+    </div>
+  }
+
+  @if (totalCount > pageSize && !loading) {
+    <p-paginator
+      [rows]="pageSize"
+      [totalRecords]="totalCount"
+      [rowsPerPageOptions]="[10, 20, 50]"
+      (onPageChange)="onPageChange($event)"
+      styleClass="paginator"
+    />
+  }
+</div>

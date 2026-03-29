@@ -1,0 +1,79 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="collection-container">
+  <header class="collection-header">
+    <div class="header-title">
+      <h1>Ma Collection</h1>
+      @if (count$ | async; as count) {
+        <span class="subtitle">{{ count }} carte(s) au total</span>
+      }
+    </div>
+
+    <div class="header-controls">
+      <div class="search-wrapper">
+        <i class="pi pi-search search-icon"></i>
+        <input
+          pInputText
+          type="text"
+          placeholder="Filtrer ma collection..."
+          (input)="onSearchChange($any($event.target).value)"
+          class="search-input"
+        />
+      </div>
+
+      <p-select
+        [options]="sortOptions"
+        [(ngModel)]="selectedSort"
+        optionLabel="label"
+        (onChange)="onSortChange()"
+        styleClass="sort-select"
+      />
+    </div>
+  </header>
+
+  @if (filteredCollection$ | async; as items) {
+    @if (items.length > 0) {
+      <div class="collection-grid">
+        @for (item of items; track item.card.id) {
+          <div class="collection-item">
+            <app-card-thumbnail [card]="item.card" />
+            <div class="item-footer">
+              <span class="item-quantity">
+                <i class="pi pi-clone"></i> x{{ item.quantity }}
+              </span>
+              <button
+                pButton
+                icon="pi pi-trash"
+                severity="danger"
+                size="small"
+                [text]="true"
+                (click)="removeAll(item, $event)"
+                pTooltip="Retirer toutes les copies"
+                tooltipPosition="top"
+              ></button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (items.length === 0) {
+      @if ((collection$ | async)?.length === 0) {
+        <div class="empty-state">
+          <i class="pi pi-book empty-icon"></i>
+          <p>Votre collection est vide.</p>
+          <a routerLink="/browse" class="browse-link">
+            <i class="pi pi-search"></i>
+            Parcourir les cartes
+          </a>
+        </div>
+      } @else {
+        <div class="empty-state">
+          <i class="pi pi-filter-slash empty-icon"></i>
+          <p>Aucune carte ne correspond à votre recherche.</p>
+        </div>
+      }
+    }
+  }
+</div>

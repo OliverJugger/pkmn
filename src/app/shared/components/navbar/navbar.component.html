@@ -1,0 +1,22 @@
+<nav class="navbar">
+  <a routerLink="/browse" class="navbar-brand">
+    <img src="pokeball.svg" alt="PokéCollection" class="brand-logo" />
+    <span class="brand-name">PokéCollection</span>
+  </a>
+
+  <div class="navbar-links">
+    <a routerLink="/browse" routerLinkActive="active-link" class="nav-link">
+      <i class="pi pi-search"></i>
+      <span>Parcourir</span>
+    </a>
+    <a routerLink="/collection" routerLinkActive="active-link" class="nav-link">
+      <i class="pi pi-book"></i>
+      <span>Ma Collection</span>
+      @if (count$ | async; as count) {
+        @if (count > 0) {
+          <span class="count-badge">{{ count }}</span>
+        }
+      }
+    </a>
+  </div>
+</nav>

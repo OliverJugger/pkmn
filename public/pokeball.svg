@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Moitié supérieure rouge -->
+  <path d="M 10,50 A 40,40 0 0,1 90,50 Z" fill="#ef4444"/>
+  <!-- Moitié inférieure blanche -->
+  <path d="M 10,50 A 40,40 0 0,0 90,50 Z" fill="#ffffff"/>
+  <!-- Bordure extérieure -->
+  <circle cx="50" cy="50" r="40" fill="none" stroke="#1f2937" stroke-width="4"/>
+  <!-- Bande centrale -->
+  <line x1="10" y1="50" x2="90" y2="50" stroke="#1f2937" stroke-width="4"/>
+  <!-- Bouton central blanc -->
+  <circle cx="50" cy="50" r="10" fill="#ffffff" stroke="#1f2937" stroke-width="4"/>
+  <!-- Point intérieur -->
+  <circle cx="50" cy="50" r="4" fill="#1f2937"/>
+</svg>

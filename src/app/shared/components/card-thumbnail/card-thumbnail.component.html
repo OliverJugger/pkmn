@@ -1,0 +1,63 @@
+<div class="card-container" [routerLink]="['/card', card.id]">
+  <div class="card-image-wrapper">
+    <img
+      [src]="card.images.small"
+      [alt]="card.name"
+      loading="lazy"
+      class="card-image"
+      (error)="onImageError($event)"
+    />
+
+    @if (isOwned$ | async) {
+      <div class="owned-badge" pTooltip="Dans ma collection physique" tooltipPosition="top">
+        <i class="pi pi-check"></i>
+      </div>
+    }
+
+    <div class="card-overlay">
+      <div class="overlay-actions" (click)="$event.stopPropagation()">
+        @if (quantity$ | async; as qty) {
+          @if (qty > 0) {
+            <div class="quantity-badge">x{{ qty }}</div>
+          }
+        }
+        <button
+          pButton
+          icon="pi pi-plus"
+          severity="success"
+          size="small"
+          [rounded]="true"
+          pTooltip="Ajouter à ma collection"
+          tooltipPosition="top"
+          (click)="onAdd($event)"
+        ></button>
+        @if (isInCollection$ | async) {
+          <button
+            pButton
+            icon="pi pi-minus"
+            severity="danger"
+            size="small"
+            [rounded]="true"
+            pTooltip="Retirer une copie"
+            tooltipPosition="top"
+            (click)="onRemove($event)"
+          ></button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="card-info">
+    <span class="card-name">{{ card.name }}</span>
+    <div class="card-meta">
+      <span class="card-set">{{ card.set.name }}</span>
+      @if (card.rarity) {
+        <p-tag
+          [value]="card.rarity"
+          [severity]="getRarityColor(card.rarity)"
+          styleClass="rarity-tag"
+        />
+      }
+    </div>
+  </div>
+</div>
